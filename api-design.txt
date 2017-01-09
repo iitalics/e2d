@@ -1,0 +1,56 @@
+
+(require e2d/math)
+; v2?, tmat?
+; tau, deg/rad, rad/deg
+; (v2-unit ang), (v2-unit/deg ang)
+; (v2+ u v)
+; (v2* v x), (v2* x v)
+; (tmat-identity)
+; (tmat* m ...)
+; (tmat* m ... v)
+; (tmat-rotated r)
+; (tmat-translated v)
+; (tmat-scaled x), (tmat-scaled v)
+DONE
+
+(require e2d/content)
+; content-mgr%, resource?, texture?, sound?, animation?, tileset?
+; (queue-texture path-string mgr)
+; (queue-animation path-string mgr)
+; (queue-sound path-string mgr)
+; (queue-tileset path-string mgr)
+; (resource-loaded? res)
+; (load-all-content mgr)
+; (tileset-texture ts x-coord y-coord)
+; (animation-texture ani ms)
+
+(require e2d/draw)
+; color?
+; (current-matrix) ???
+; (with-projection proj fn)
+; (with-matrix mat fn)
+; (with-identity fn)
+; (push-matrix!)
+; (pop-matrix!)
+; (draw-clear col)
+; (draw-set-tint! col)
+; (draw-set-alpha! a)
+; (draw-no-tint!)
+; (draw-texture tex pos #:size siz #:origin or #:rotate rot)
+; (draw-shape pts stroke fill)
+
+(require e2d/engine)
+; scene?, entity?, component%
+; (make-scene)
+; (tick-scene), (draw-scene)
+; (make-entity scn comps)
+; (add-component! ent comp)
+; (remove-component! ent comp)
+; (send comp on-tick)
+; (send comp on-draw-pre)
+; (send comp on-draw)
+; (send comp get-camera)
+; (send comp get-
+
+(require e2d)
+; all of the above
