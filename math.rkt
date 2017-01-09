@@ -22,6 +22,7 @@
   [v2 (-> real? real? v2?)]
   [v2-x (-> v2? real?)]
   [v2-y (-> v2? real?)]
+  [v2=? (-> v2? v2? boolean?)]
   [v2~a (-> v2? string?)]
   [v2-from-angle (-> real? v2?)]
   [v2-from-angle/deg (-> real? v2?)]
@@ -37,10 +38,12 @@
   [tmat-rotated/deg (-> real? tmat?)]
   [tmat-scaled (case-> (-> (or/c v2? real?) tmat?)
                        (-> real? real? tmat?))]
+  [tmat=? (-> tmat? tmat? boolean?)]
+  [tmat~a (-> tmat? string?)]
   [list->tmat (-> list? tmat?)]
   [tmat->list (-> tmat? pair?)]
 
-  [tmat* (-> tmat? (or/c tmat? v2?) (or/c tmat? v2?))]
+  [tmat* (-> tmat? (or/c tmat? v2?) ... (or/c tmat? v2?))]
   [tmat*v2 (-> tmat? v2? v2?)]
   [tmat*tmat (-> tmat? tmat? tmat?)]
   ))
@@ -93,6 +96,10 @@
 (define (v2-x v) (f32vector-ref v 0))
 (define (v2-y v) (f32vector-ref v 1))
 
+(define (v2=? u v)
+  (and (= (v2-x u) (v2-x v))
+       (= (v2-y u) (v2-y v))))
+
 (define (write-v2 v [out (current-output-port)])
   (fprintf out "<~a,~a>"
            (f32vector-ref v 0)
@@ -129,7 +136,7 @@
 
 
 
-;; tmat:  translation matrix (represented as 6-element f32vector)
+;; tmat:  transformation matrix (represented as 6-element f32vector)
 
 (define (tmat? m)
   (and (f32vector? m)
@@ -142,11 +149,11 @@
 (define tmat-translated
   (case-lambda
     [(v)
-     (f32vector 0.0f0 0.0f0 (v2-x v)
-                0.0f0 0.0f0 (v2-y v))]
+     (f32vector 1.0f0 0.0f0 (v2-x v)
+                0.0f0 1.0f0 (v2-y v))]
     [(x y)
-     (f32vector 0.0f0 0.0f0 (real->single-flonum x)
-                0.0f0 0.0f0 (real->single-flonum y))]))
+     (f32vector 1.0f0 0.0f0 (real->single-flonum x)
+                0.0f0 1.0f0 (real->single-flonum y))]))
 
 (define (tmat-rotated ang)
   (let ([sn (real->single-flonum (sin ang))]
@@ -170,6 +177,11 @@
      (f32vector (real->single-flonum ax) 0.0f0 0.0f0
                 0.0f0 (real->single-flonum ay) 0.0f0)]))
 
+(define (tmat=? m1 m2)
+  (for/and ([i (in-range 6)])
+    (= (f32vector-ref m1 i)
+       (f32vector-ref m2 i))))
+
 (define (list->tmat lst)
   (cond
     [(= 6 (length lst))
@@ -178,7 +190,8 @@
     [else
      (error "expected 9 elements to create 3x3 matrix")]))
 
-(define tmat->list f32vector->list)
+(define tmat->list
+  f32vector->list)
 
 (define (tmat~a mat)
   (match (f32vector->list mat)
