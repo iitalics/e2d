@@ -80,19 +80,30 @@
       (for* ([lainx (in-range 0 801 50)]
              [lainy (in-range 0 601 50)])
         (glPushMatrix)
-        (glTranslatef lainx lainy 0)
-        (glScalef 64 68 1)
-        (glRotatef (+ lainx lainy (* (delta-time) -0.18)) 0 0 1)
+
+        (define rot (+ lainx lainy (* (delta-time) -0.18)))
+
         (glBindTexture GL_TEXTURE_2D lain-tex)
         (glEnable GL_TEXTURE_2D)
         (glBegin GL_QUADS)
-        (for ([scoord (in-list '((-0.5 -0.5) (+0.5 -0.5) (+0.5 +0.5) (-0.5 +0.5)))]
-              [tcoord (in-list '(( 0  0) ( 1  0) ( 1  1) ( 0  1)))])
-          (glTexCoord2i (first tcoord)
-                        (second tcoord))
-          (glVertex3f (first scoord)
-                      (second scoord)
-                      0))
+
+        (let ([mat
+               (tmat* (tmat-translated lainx lainy)
+                      (tmat-translated (* 30 (sin (deg->rad rot)))
+                                       (* 20 (cos (deg->rad rot))))
+                      (tmat-scaled 64 68)
+                      )])
+
+          (for ([scoord (in-list '((-0.5 -0.5) (+0.5 -0.5) (+0.5 +0.5) (-0.5 +0.5)))]
+                [tcoord (in-list '(( 0  0) ( 1  0) ( 1  1) ( 0  1)))])
+            (let ([v (tmat* mat
+                            (v2 (first scoord)
+                                (second scoord)))])
+              (glTexCoord2i (first tcoord)
+                            (second tcoord))
+              (glVertex3f (v2-x v)
+                          (v2-y v)
+                          0))))
         (glEnd)
         (glPopMatrix))))
 
@@ -113,7 +124,7 @@
             (draw)
             (swap-gl-buffers)
             (glFlush))))
-      ))
+       ))
 
   (let* ([f (new frame% [label ""])]
          [c (new glcanv% [parent f])])
@@ -125,6 +136,7 @@
          (when (send f is-shown?)
            (send c refresh)
            (sleep 1/45)
-           (loop))))))
+           (loop)))
+       (printf "\ngui closed\n"))))
 
   )
