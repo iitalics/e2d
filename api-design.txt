@@ -1,4 +1,13 @@
 
+(require e2d/ctx)
+; (current-e2d-context)
+; (with-new-e2d-context fn)
+; (e2d-set-title [title] [ctx])
+; (e2d-set-windowed [w h] [resizable?] [ctx])
+; (e2d-set-fullscreen [ctx])
+; (e2d-get-size [ctx])
+; (e2d-add-hook evt-name fn)
+
 (require e2d/math)
 ; v2?, tmat?
 ; tau, deg/rad, rad/deg
@@ -11,10 +20,12 @@
 ; (tmat-rotated r)
 ; (tmat-translated v)
 ; (tmat-scaled x), (tmat-scaled v)
-DONE
 
 (require e2d/content)
-; content-mgr%, resource?, texture?, sound?, animation?, tileset?
+; content-mgr
+;   resource?, texture?
+;   tileset?, animation?, font?
+;   sound?
 ; (queue-texture path-string mgr)
 ; (queue-animation path-string mgr)
 ; (queue-sound path-string mgr)
@@ -26,31 +37,34 @@ DONE
 
 (require e2d/draw)
 ; color?
-; (current-matrix) ???
-; (with-projection proj fn)
-; (with-matrix mat fn)
-; (with-identity fn)
-; (push-matrix!)
-; (pop-matrix!)
-; (draw-clear col)
-; (draw-set-tint! col)
-; (draw-set-alpha! a)
-; (draw-no-tint!)
-; (draw-texture tex pos #:size siz #:origin or #:rotate rot)
+; (draw-texture tex
+;               [pos]
+;               #:size [siz]
+;               #:origin [org]
+;               #:rotation [rot])
+; (draw-texture tex w h transform)
 ; (draw-shape pts stroke fill)
+; (draw-shape pts stroke fill [transform t])
 
 (require e2d/engine)
 ; scene?, entity?, component%
 ; (make-scene)
 ; (tick-scene), (draw-scene)
 ; (make-entity scn comps)
+; (make-entity* scn comps ...)
 ; (add-component! ent comp)
 ; (remove-component! ent comp)
+; (send comp added-to)
+; (send comp removed-from)
 ; (send comp on-tick)
 ; (send comp on-draw-pre)
 ; (send comp on-draw)
-; (send comp get-camera)
-; (send comp get-
+; (send comp camera-transform)
 
 (require e2d)
 ; all of the above
+
+
+(require e2d/extra/comps)
+; moving-component%
+; texture-component%
