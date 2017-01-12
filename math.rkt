@@ -188,7 +188,7 @@
      (apply f32vector
             (map real->single-flonum lst))]
     [else
-     (error "expected 9 elements to create 3x3 matrix")]))
+     (error "expected 6 elements to create 2x3 matrix")]))
 
 (define tmat->list
   f32vector->list)
