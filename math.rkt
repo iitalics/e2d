@@ -43,7 +43,7 @@
   [list->tmat (-> list? tmat?)]
   [tmat->list (-> tmat? pair?)]
 
-  [tmat* (-> tmat? (or/c tmat? v2?) ... (or/c tmat? v2?))]
+  [tmat* (->* (tmat?) #:rest (or/c tmat? v2?) (or/c tmat? v2?))]
   [tmat*v2 (-> tmat? v2? v2?)]
   [tmat*tmat (-> tmat? tmat? tmat?)]
   ))
